@@ -17,7 +17,56 @@ const ButtonBase = css`
   position: relative;
 `;
 
-const overlayStates = ({ selected = false } = {}) => css`
+const outlineState = (error = false) => css`
+  &:after {
+    box-sizing: border-box;
+    content: "";
+    display: block;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: transparent;
+    border: 1px solid rgba(77, 78, 76, 0.7);
+  }
+
+  &:not([disabled]) {
+    &:hover {
+      &:after {
+        border: 2px solid #1874bc;
+      }
+    }
+
+    &:focus {
+      &:after {
+        border: 2px solid #49a2df;
+        box-shadow: 0 0 4px #49a2df;
+      }
+    }
+
+    &:active {
+      &:after {
+        border: 2px solid #49a2df;
+      }
+    }
+  }
+
+  ${error &&
+    css`
+      &:after {
+        border: 2px solid #b21e2d;
+      }
+    `}
+
+  &[disabled] {
+    &:after {
+      border: 1px solid rgba(77, 78, 76, 0.3);
+    }
+  }
+`;
+
+const overlayState = (selected = false) => css`
   &:after {
     content: "";
     display: block;
@@ -58,21 +107,15 @@ const overlayStates = ({ selected = false } = {}) => css`
 
 const StyledButton = styled.button`
   ${ButtonBase};
-  background: black;
+  background: white;
   color: lightblue;
-
-  ${overlayStates({
-    selected: p => p.happy
-  })};
-
-  > span {
-    color: hotpink;
-  }
+  border: none;
+  ${p => outlineState(p.error)};
 `;
 
 const Button = ({ icon, children }) => {
   return (
-    <StyledButton happy>
+    <StyledButton disabled>
       <span>{children}</span>
       {icon && icon}
     </StyledButton>
