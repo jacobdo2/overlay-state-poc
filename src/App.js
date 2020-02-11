@@ -15,10 +15,15 @@ const ButtonBase = css`
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
   position: relative;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const outlineState = (error = false) => css`
-  &:after {
+  &:before {
     box-sizing: border-box;
     content: "";
     display: block;
@@ -33,20 +38,22 @@ const outlineState = (error = false) => css`
 
   &:not([disabled]) {
     &:hover {
-      &:after {
+      &:before {
         border: 2px solid #1874bc;
       }
     }
 
     &:focus {
-      &:after {
-        border: 2px solid #49a2df;
-        box-shadow: 0 0 4px #49a2df;
+      &[data-focus-visible-added] {
+        &:before {
+          border: 2px solid #49a2df;
+          box-shadow: 0 0 4px #49a2df;
+        }
       }
     }
 
     &:active {
-      &:after {
+      &:before {
         border: 2px solid #49a2df;
       }
     }
@@ -54,13 +61,13 @@ const outlineState = (error = false) => css`
 
   ${error &&
     css`
-      &:after {
+      &:before {
         border: 2px solid #b21e2d;
       }
     `}
 
   &[disabled] {
-    &:after {
+    &:before {
       border: 1px solid rgba(77, 78, 76, 0.3);
     }
   }
@@ -86,8 +93,10 @@ const overlayState = (selected = false) => css`
   }
 
   &:focus {
-    &:after {
-      opacity: 0.16;
+    &[data-focus-visible-added] {
+      &:after {
+        opacity: 0.16;
+      }
     }
   }
 
@@ -100,22 +109,23 @@ const overlayState = (selected = false) => css`
   ${selected &&
     css`
       &:after {
-        opacity: 0.5;
+        opacity: 0.12;
       }
     `}
 `;
 
 const StyledButton = styled.button`
   ${ButtonBase};
-  background: white;
-  color: lightblue;
+  background: black;
+  color: red;
   border: none;
+  ${p => overlayState(p.selected)};
   ${p => outlineState(p.error)};
 `;
 
 const Button = ({ icon, children }) => {
   return (
-    <StyledButton disabled>
+    <StyledButton selected>
       <span>{children}</span>
       {icon && icon}
     </StyledButton>
