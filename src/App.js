@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
-
+import DashboardIcon from "@material-ui/icons/Dashboard";
 function App() {
   return (
     <div className="App">
-      <Button />
+      <Button>Normal</Button>
+      <Button icon={<DashboardIcon />}>With Icon</Button>
     </div>
   );
 }
@@ -58,14 +59,24 @@ const overlayStates = ({ selected = false } = {}) => css`
 const StyledButton = styled.button`
   ${ButtonBase};
   background: black;
-  color: hotpink;
+  color: lightblue;
 
   ${overlayStates({
     selected: p => p.happy
   })};
+
+  > span {
+    color: hotpink;
+  }
 `;
-const Button = () => {
-  return <StyledButton happy>hello world</StyledButton>;
+
+const Button = ({ icon, children }) => {
+  return (
+    <StyledButton happy>
+      <span>{children}</span>
+      {icon && icon}
+    </StyledButton>
+  );
 };
 
 export default App;
